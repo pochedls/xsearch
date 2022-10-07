@@ -3,6 +3,7 @@ import re
 import numpy as np
 import os
 import fnmatch
+import glob
 
 def getGroupValues(db, facet):
     """
@@ -173,17 +174,25 @@ def findPaths(experiment,
                                 entry with metadata for that dataset. If applicable, alternate_paths are also listed
                                 and whether the dataset was uniquely chosen based on the filter criteria.
     """
-    # check if json file exists
+    # define json file search
     fn = jsonDir + experiment + '/' + variable + '.json'
     if lcpath:
         fn = fn.replace('/p/', '/p/climate/')
-    # check if file exists, if not return empty list
-    if not os.path.exists(fn):
-        return []
     # load data
-    f = open(fn, 'r')
-    data = json.load(f)
-    f.close()
+    files = glob.glob(fn)
+    # loop over all json files and store
+    # in common dictionary
+    data = {}
+    for fn in files:
+        f = open(fn, 'r')
+        data_subset = json.load(f)
+        f.close()
+        data = {**data, **data_subset}
+    if len(files) == 0:
+        if fullMetadata:
+            return {}
+        else:
+            return []
     # whittle down by frequency and variable
     rmpaths = []
     for dpath in data.keys():
