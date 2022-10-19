@@ -22,13 +22,13 @@ If the xsearch version is incremented you will receive a warning on import:
 
 `xsearch` will create a file in your home directory to support version checking.
 
-Alternatively, you can download the contents of this repository and import the package (or the `search.py` file).
+Alternatively, you can download the contents of this repository and import the package (or the `search.py` file). In this case, we suggest you watch the repository (in GitHub) so that you know when there are version changes.
 
 `xsearch` is built around metadata logic documented in the [CMIP6 Global Attributes, DRS, Filenames, Directory Structure, and CV’s document](https://goo.gl/v1drZl). These logic underpin the filename and directory creation, written by [CMOR](https://cmor.llnl.gov/) and other CMIP-writing libraries. The [CMIP6 CMOR Tables](https://github.com/PCMDI/cmip6-cmor-tables/tree/master/Tables) (e.g. Amon - designate A=atmospheric realm, and mon=monthly frequency), similar logic underpinned the [CMIP5](https://github.com/PCMDI/cmip5-cmor-tables/tree/master/Tables) and [CMIP3](https://github.com/PCMDI/cmip3-cmor-tables/tree/master/Tables) phases.
 
 ### Support
 
-Note: this software library is designed to help PCMDI users search for CMIP data. If the search works correctly, but points to a dataset that has problems (e.g., a corrupted or incomplete dataset) these issues should not be logged as an issue / bug in this repository.
+Note that this software library is designed to help PCMDI users search for CMIP data. If the search works correctly, but points to a dataset that has problems (e.g., a corrupted or incomplete dataset) these issues should not be logged as an issue / bug in this repository.
 
 Contributions from users of this utility are critical (issue reports and contributed code to improve the package or address bugs).
 
@@ -47,7 +47,7 @@ Contributions from users of this utility are critical (issue reports and contrib
 The search warns that the returned paths include data that spans multiple realms and multiple tables. You can add optional facets to select one realm/table:
 
     dpaths = xs.findPaths('historical', 'tas', 'mon', realm='atmos', cmipTable='Amon')
-    print(dpaths)
+    print(dpaths.keys())
 
 > ['/p/css03/cmip5_css01/data/cmip5/output1/BCC/bcc-csm1-1-m/historical/mon/atmos/Amon/r1i1p1/v20120709/tas/',  
 >  '/p/css03/cmip5_css01/data/cmip5/output1/BCC/bcc-csm1-1-m/historical/mon/atmos/Amon/r2i1p1/v20120709/tas/',  
@@ -60,35 +60,14 @@ The search warns that the returned paths include data that spans multiple realms
 >  '/p/css03/cmip5_css01/data/cmip5/output1/CNRM-CERFACS/CNRM-CM5/historical/mon/atmos/Amon/r2i1p1/v20110901/tas/',  
 > ...
 
-Other search facets include: `mip_era` (**CMIP5** or **CMIP6**), `activity` (e.g., **CMIP** or **ScenarioMIP**), `institute` (e.g., **E3SM-Project**), `model` (e.g., **E3SM-1-1**), `member` (e.g., **r1i1p1f1**), `grid` (e.g., **gn** or **gr**), or `gridLabel` (e.g., **glb-z1-gr**).
+Note that, by default, `dpaths` is a dictionary and that each key is a dataset path. Each dictionary entry contains dataset metadata:
 
-Searches can also include a wildcard (`*`) in required search terms or for additional facets:
+    key = list(dpaths.keys())[0]  # get the first key
+    print(key)  # print dataset
+    print(dpaths[key])  # print metadata for this dataset
 
-    dpaths = xs.findPaths('ssp*', 'tas', 'mon', cmipTable='Amon', realm='atmos', activity='Scenario*', fullMetadata=True)
-    print(xs.getGroupValues(dpaths, 'experiment'))
-
-> ['ssp119', 'ssp370', 'ssp245', 'ssp126', 'ssp434', 'ssp534-over', 'ssp585', 'ssp460'] 
-
-The user can also specify a number of optional arguments:
-
-* `deduplicate` (default `True`): flag whether to de-duplicate so that a single dataset path is returned for each unique combination of model and member. If one of multiple possible datasets are chosen, the alternates are listed in `alternate_paths` (see `fullMetadata` option).
-    * criteria: The ordering of criteria used to deduplicate. The default is `["version", "timepoints", "nc_creation_date", "esgf_publish", "gr"]`, which orders by a) newest version, number of timesteps, the creation_date embedded in netCDF file metadata, and a prioritization for data that has been published on ESGF and has the glabel `gr`.
-* `printDuplicates` (default `False`): If True, all potential paths will be printed and paths that are chosen will be denoted with an asterisk
-* `verbose` (default `True`): flag to print out information during the search
-* `lcpath` (default `False`): flag to adjust the data directories to reflect the LC (Livermore Computing/LLNL HPC) mountpoint
-* `filterRetired` (default `True`): flag to filter out datasets that are retired (datasets are retired if they are moved)
-* `filterRetracted` (default `True`): flag to filter out datasets that are retracted
-* `filterIgnored` (default `True`): flag to filter out datasets that have been marked as ignored
-* `jsonDir` (`str`): This defaults to the current location for the json metadata files, but the user can modify this
-
-By default, `xsearch` will simply return a list of paths. `xsearch` can also return the full metadata for selected paths by setting `fullMetadata=True`:
-
-    dpaths = xs.findPaths('historical', 'tas', 'mon', realm='atmos', cmipTable='Amon', fullMetadata=True)
-    p1 = list(dpaths.keys())[0]  # get first path
-    dpaths[p1]
-
-This option will instead return a dictionary for each path with a complete set of metadata for that dataset directory:
-
+> /p/css03/cmip5_css01/data/cmip5/output1/CNRM-CERFACS/CNRM-CM5/historical/mon/atmos/Amon/r10i1p1/v20110901/tas/  
+> 
 > {'keyid': 'CMIP5.CMIP.CNRM-CERFACS.CNRM-CM5.historical.r10i1p1.Amon.atmos.mon.tas.gu.glb-z1-gu.v20110901',  
 >  'mip_era': 'CMIP5',  
 >  'activity': 'CMIP',  
@@ -126,6 +105,54 @@ This function supports wildcard searches. Another search function allows the use
 >  'GFDL-ESM2G',
 >  'GFDL-ESM2M',
 > ...
+
+Other search facets include: `mip_era` (**CMIP5** or **CMIP6**), `activity` (e.g., **CMIP** or **ScenarioMIP**), `institute` (e.g., **E3SM-Project**), `model` (e.g., **E3SM-1-1**), `member` (e.g., **r1i1p1f1**), `grid` (e.g., **gn** or **gr**), or `gridLabel` (e.g., **glb-z1-gr**).
+
+Searches can also include a wildcard (`*`) in required search terms or for additional facets:
+
+    dpaths = xs.findPaths('ssp*', 'tas', 'mon', cmipTable='Amon', realm='atmos', activity='Scenario*')
+    print(xs.getGroupValues(dpaths, 'experiment'))
+
+> ['ssp119', 'ssp370', 'ssp245', 'ssp126', 'ssp434', 'ssp534-over', 'ssp585', 'ssp460'] 
+
+The user can also specify a number of optional arguments:
+
+* `deduplicate` (default `True`): flag whether to de-duplicate so that a single dataset path is returned for each unique combination of model and member. If one of multiple possible datasets are chosen, the alternates are listed in `alternate_paths` (see `fullMetadata` option). Make sure to read the note on de-duplication below.
+    * criteria: The ordering of criteria used to deduplicate. The default is `["version", "timepoints", "nc_creation_date", "esgf_publish", "gr"]`, which orders by a) newest version, b) number of timesteps, the c) creation_date embedded in netCDF file metadata, and a prioritization for data that has been d) published on ESGF and e) has the grid label `gr`.
+* `printDuplicates` (default `False`): If True, all potential paths will be printed and paths that are chosen will be denoted with an asterisk
+* `verbose` (default `True`): flag to print out information during the search
+* `lcpath` (default `False`): flag to adjust the data directories to reflect the LC (Livermore Computing/LLNL HPC) mountpoint
+* `filterRetired` (default `True`): flag to filter out datasets that are retired (datasets are retired if they are moved)
+* `filterRetracted` (default `True`): flag to filter out datasets that are retracted
+* `filterIgnored` (default `True`): flag to filter out datasets that have been marked as ignored
+* `jsonDir` (`str`): This defaults to the current location for the json metadata files, but the user can modify this
+* `fullMetadata` (default `True`): flag to specify the datatype returned. If true, `xsearch` will simply return a dictionary with complete metadata for selected paths. `xsearch` can also return a list of paths by setting `fullMetadata=False`:
+
+### A note on de-duplication
+
+Note that `xsearch` is configured to de-duplicate for each set of paths related to each model and model realization. For example, if you have several versions of data for **Model A** / **r1i1p1f1**, `xsearch` will select the most recent and complete version for you. 
+
+But for a given model and realization, there may be more aspects of the data than the dataset version. For example, if we search for all variables beginning with `ta` for `E3SM-1-0`:
+
+    dpaths = xs.findPaths('historical', 'ta*', 'mon', realm='atmos', cmipTable='Amon', member='r1i1p1f1', model='E3SM-1-0', printDuplicates=True)
+
+We get a message noting that we are spanning multiple variables:
+
+> Multiple values for variable. Consider filtering by variable.                                      
+> Available values: tauu, tauv, tasmin, tasmax, ta, tas
+
+`xsearch` chooses one dataset (of the datasets spanning several possible variables) for a given member (`r1i1p1f1`):
+
+> \* /p/user_pub/work/CMIP6/CMIP/E3SM-Project/E3SM-1-0/historical/r1i1p1f1/Amon/ta/gr/v20220108/  
+>   
+> duplicate: /p/user_pub/work/CMIP6/CMIP/E3SM-Project/E3SM-1-0/historical/r1i1p1f1/Amon/tauu/gr/v20190913/  
+> duplicate: /p/user_pub/work/CMIP6/CMIP/E3SM-Project/E3SM-1-0/historical/r1i1p1f1/Amon/tauv/gr/v20190913/  
+> duplicate: /p/user_pub/work/CMIP6/CMIP/E3SM-Project/E3SM-1-0/historical/r1i1p1f1/Amon/ta/gr/v20191220/   
+> duplicate: /p/css03/esgf_publish/CMIP6/CMIP/E3SM-Project/E3SM-1-0/historical/r1i1p1f1/Amon/tas/gr/v20190913/  
+> ...
+
+This isn't typically a problem if you specify an exact experiment, variable, and frequency.
+
 
 ### Acknowledgements
 
