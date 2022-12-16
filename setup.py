@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 version = '0.0.3'
 
-packages = find_packages()
+packages = find_packages(include=['xsearch'])
 
 setup(
     name="xsearch",
