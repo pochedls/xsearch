@@ -22,7 +22,9 @@ If the xsearch version is incremented you will receive a warning on import:
 
 `xsearch` will create a file in your home directory to support version checking.
 
-Alternatively, you can download the contents of this repository and import the package (or the `search.py` file). In this case, we suggest you watch the repository (in GitHub) so that you know when there are version changes.
+Alternatively, you can download the contents of this repository and import the package (or the `search.py` file). In this case, we suggest you watch the repository (in GitHub) so that you know when there are version changes. You can either add `export PYTHONPATH='/PATH/TO/YOUR/XSEARCH/'` in your `~/.bashrc` or use the following commend to make xsearch importable:
+
+    python setup.py install
 
 `xsearch` is built around metadata logic documented in the [CMIP6 Global Attributes, DRS, Filenames, Directory Structure, and CV’s document](https://goo.gl/v1drZl). These logic underpin the filename and directory creation, written by [CMOR](https://cmor.llnl.gov/) and other CMIP-writing libraries. The [CMIP6 CMOR Tables](https://github.com/PCMDI/cmip6-cmor-tables/tree/master/Tables) (e.g. Amon - designate A=atmospheric realm, and mon=monthly frequency), similar logic underpinned the [CMIP5](https://github.com/PCMDI/cmip5-cmor-tables/tree/master/Tables) and [CMIP3](https://github.com/PCMDI/cmip3-cmor-tables/tree/master/Tables) phases.
 
