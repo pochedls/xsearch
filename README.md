@@ -22,7 +22,7 @@ If the xsearch version is incremented you will receive a warning on import:
 
 `xsearch` will create a file in your home directory to support version checking.
 
-Alternatively, you can download the contents of this repository and import the package (or the `search.py` file). In this case, we suggest you watch the repository (in GitHub) so that you know when there are version changes. You can either add `export PYTHONPATH='/PATH/TO/YOUR/XSEARCH/'` in your `~/.bashrc` or use the following commend to make xsearch importable:
+Alternatively, you can download the contents of this repository and import the package (or the `search.py` file). In this case, we suggest you watch the repository (in GitHub) so that you know when there are version changes. You can either add `export PYTHONPATH='/PATH/TO/YOUR/XSEARCH/'` to your `~/.bashrc` file or use the following command to include xsearch in your current conda environment:
 
     python setup.py install
 
