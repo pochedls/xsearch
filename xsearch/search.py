@@ -140,6 +140,7 @@ def findPaths(experiment,
               deduplicate=True,
               printDuplicates=False,
               lcpath=False,
+              nimbuspath=False,
               filterRetired=True,
               filterRetracted=True,
               filterIgnored=True,
@@ -159,6 +160,7 @@ def findPaths(experiment,
                                 where version is the string version_id, timepoints is the number of time steps, and
                                 creation_date is the creation date in the dataset header
         lcpath Bool:            flag to denote whether search is on an LC system (data path is different on LC systems)
+        nimbuspath Bool:        flag to denote search is on an Nimbus system (data path is different on Nimbus)
         deduplicate Bool:       flag to de-duplicate datasets for the same model/realization
         filterRetracted Bool:   flag to ignore retracted datasets (if True; default True)
         filterIgnored Bool:     flag to ignore datasets marked as ignored (if True; default True)
@@ -178,6 +180,8 @@ def findPaths(experiment,
     fn = jsonDir + experiment + '/' + variable + '.json'
     if lcpath:
         fn = fn.replace('/p/', '/p/climate/')
+    if nimbuspath:
+        fn = fn.replace('/p/', '/home/jovyan/local-data/')
     # load data
     files = glob.glob(fn)
     # loop over all json files and store
