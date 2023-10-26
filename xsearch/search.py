@@ -37,11 +37,12 @@ def retainDataByFacetValue(db, facet, value):
         values dict: dictionary with all items dropped, except
                      those matching the facet-value pairing
     """
-    keyList = list(db.keys())
+    db_copy = db.copy()
+    keyList = list(db_copy.keys())
     for key in keyList:
-        if db[key][facet] != value:
-            db.pop(key)
-    return db
+        if db_copy[key][facet] != value:
+            db_copy.pop(key)
+    return db_copy
 
 
 def natural_sort(l):
