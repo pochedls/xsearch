@@ -9,6 +9,7 @@ from .search import retainDataByFacetValue
 from .search import natural_sort
 from .search import findPaths
 from .search import getValuesForFacet
+from .search import addAttribute
 import os
 
 # version
