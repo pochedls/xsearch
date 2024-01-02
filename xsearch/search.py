@@ -4,6 +4,42 @@ import numpy as np
 import os
 import fnmatch
 import glob
+import copy
+
+
+def addAttribute(db, attr):
+    """
+    addAttribute(db, attr)
+
+    Function loops over datasets in an xsearch path dictionary and
+    adds or updates the dictionary to include a dataset attribute.
+
+    Inputs
+        db dict: Dictionary of results to search
+        attr str: Attribute to add to dictionary
+
+    Returns
+        pathDict Dict: New dictionry with attr included
+
+    Note: If attribute does not exist, it will not be added. Function will
+    import and use xarray to open datasets.
+    """
+    # make sure xarray is imported
+    import xarray as xr
+    # make a copy of the original dictionary
+    db_new = copy.deepcopy(db)
+    # loop over each dataset and fetch the attribute of interest
+    for p in db.keys():
+        # load dataset
+        ds = xr.open_mfdataset(p + '/*.nc')
+        attrs = ds.attrs
+        if attr not in attrs:
+            continue
+        else:
+            attr_value = attrs[attr]
+            db_new[p][attr] = attr_value
+    return db_new
+
 
 def getGroupValues(db, facet):
     """
