@@ -171,7 +171,7 @@ def filter_dpaths(dpaths, modelData, crit):
 def findPaths(experiment,
               variable,
               frequency,
-              jsonDir='/p/user_pub/xclim/persist/xsearch/',
+              jsonDir='/global/cfs/projectdirs/m4581/xsearch/json/',
               criteria=['version', 'timepoints', 'nc_creation_date', 'esgf_publish', 'gr'],
               verbose=True,
               deduplicate=True,

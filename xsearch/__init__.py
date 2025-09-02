@@ -13,7 +13,7 @@ from .search import addAttribute
 import os
 
 # version
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 # since this software is installed centrally and may be updated
 # this section of code stores the xsearch version in a hidden

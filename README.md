@@ -2,7 +2,7 @@
 
 ### Overview
 
-This repository tracks the `xsearch` utility, which allows PCMDI users to query CMIP5 and CMIP6 data. The utility returns dataset paths for a given search criteria.
+This repository tracks the `xsearch` utility, which allows NERSC users to query CMIP5 and CMIP6 data. The utility returns dataset paths for a given search criteria.
 
 These dataset directories can be used with [xarray](https://docs.xarray.dev/en/stable/) and [xcdat](https://xcdat.readthedocs.io/en/latest/) to open and read the data (e.g., via `xcdat.open_mfdataset()`). The **x** in `xsearch` denotes that the search is supposed to complement `xarray` and `xcdat`.
 
@@ -30,7 +30,7 @@ Alternatively, you can download the contents of this repository and import the p
 
 ### Support
 
-Note that this software library is designed to help PCMDI users search for CMIP data. If the search works correctly, but points to a dataset that has problems (e.g., a corrupted or incomplete dataset) these issues should not be logged as an issue / bug in this repository.
+Note that this software library is designed to help users search for CMIP data. If the search works correctly, but points to a dataset that has problems (e.g., a corrupted or incomplete dataset) these issues should not be logged as an issue / bug in this repository.
 
 Contributions from users of this utility are critical (issue reports and contributed code to improve the package or address bugs).
 
@@ -159,3 +159,5 @@ This isn't typically a problem if you specify an exact experiment, variable, and
 ### Acknowledgements
 
 Much of the de-duplication logic and ideas from this are from the [durolib](https://github.com/durack1/durolib) library, created by Paul Durack [@durack1](https://github.com/durack1) to search for CMIP data. durolib handled [CDAT](https://cdat.llnl.gov/) xml files, which could be used to read in multi-file datasets. Logic to produce the xml files was refactored in [xagg](https://github.com/pochedls/xagg). xagg xmls are being phased out in favor the current approach: rapidly searchable json files, which allow the users to locate datasets and read them in with xarray based tools. Stephen Po-Chedley [@pochedls](https://github.com/pochedls/) produced the `xsearch` initial version.
+
+LLNL-CODE-2010515
